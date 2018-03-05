@@ -50,7 +50,7 @@ pub enum Status {
 }
 
 #[repr(C)]
-enum ApiProductionStatus {
+enum ApiProductionStatusType {
    Alpha_Internal,          /* For internal TI use only.  Not intended to be used by customers */
    Alpha,                   /* Early Engineering release.  May not be functionally complete */
    Beta_Internal,           /* For internal TI use only.  Not intended to be used by customers */
@@ -63,7 +63,7 @@ pub struct LibraryInfo{
    ApiMajorVersion: u8,
    ApiMinorVersion: u8,
    ApiRevision: u8,
-   ApiProductionStatus: ApiProductionStatus,
+   ApiProductionStatus: ApiProductionStatusType,
    ApiBuildNumber: u32,
    ApiTechnologyType: u8,
    ApiTechnologyRevision: u8,
