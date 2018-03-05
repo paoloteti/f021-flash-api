@@ -9,9 +9,6 @@
 extern crate libc;
 use libc::types::common::c99::*;
 
-pub mod f021;
-use f021::*;
-
 pub type FlashStatusType = uint32_t;
 
 #[repr(C)]
@@ -60,15 +57,15 @@ enum ApiProductionStatusType {
 
 #[repr(C)]
 pub struct LibraryInfo{
-   ApiMajorVersion: u8,
-   ApiMinorVersion: u8,
-   ApiRevision: u8,
+   ApiMajorVersion: uint8_t,
+   ApiMinorVersion: uint8_t,
+   ApiRevision: uint8_t,
    ApiProductionStatus: ApiProductionStatusType,
-   ApiBuildNumber: u32,
-   ApiTechnologyType: u8,
-   ApiTechnologyRevision: u8,
-   ApiEndianness: u8,
-   ApiCompilerVersion: u32,
+   ApiBuildNumber: uint32_t,
+   ApiTechnologyType: uint8_t,
+   ApiTechnologyRevision: uint8_t,
+   ApiEndianness: uint8_t,
+   ApiCompilerVersion: uint32_t,
 }
 
 #[repr(C)]
@@ -83,6 +80,37 @@ pub enum FlashReadMarginModeType {
    RM1        = 0x2,
 }
 
+#[cfg(target_endian = "little")]
+#[repr(C)]
+pub struct DeviceInfo {
+   NumberOfBanks: uint16_t,
+   Reserved: uint16_t,
+   DeviceMemorySize: uint16_t,
+   DevicePackage: uint16_t,
+   AsicId: uint32_t,
+   LotNumber: uint32_t,
+   WaferNumber: uint16_t,
+   FlowCheck: uint16_t,
+   WaferYCoordinate: uint16_t,
+   WaferXCoordinate: uint16_t,
+}
+
+#[cfg(target_endian = "big")]
+#[repr(C)]
+pub struct DeviceInfo {
+   Reserved: uint16_t,
+   NumberOfBanks: uint16_t,
+   DevicePackage: uint16_t,
+   DeviceMemorySize: uint16_t,
+   AsicId :uint32_t,
+   LotNumber: uint32_t,
+   FlowCheck: uint16_t,
+   WaferNumber: uint16_t,
+   WaferXCoordinate: uint16_t,
+   WaferYCoordinate: uint16_t,
+}
+
+
 #[link(name = "flash")]
 extern {
     #[link_name = "Fapi_getLibraryInfo"]
@@ -93,11 +121,11 @@ extern {
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_isAddressEcc"]
-    pub fn isAddressEcc(address: u32) -> bool;
+    pub fn isAddressEcc(address: uint32_t) -> bool;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_isAddressEEPROM"]
-    pub fn isAddressEEPROM(address: u32) -> bool;
+    pub fn isAddressEEPROM(address: uint32_t) -> bool;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_enableAutoEccCalculation"]
@@ -108,7 +136,7 @@ extern {
     pub fn disableAutoEccCalculation() -> Status;
 
     #[link_name = "Fapi_getNumberOfBankSectors"]
-    pub fn getNumberOfBankSectors(Bank: u32) -> u32;
+    pub fn getNumberOfBankSectors(Bank: uint32_t) -> uint32_t;
 
     #[link_name = "Fapi_doBlankCheck"]
     pub fn doBlankCheck(StartAddress: *const uint32_t,
