@@ -48,11 +48,16 @@ pub enum Status {
 
 #[repr(C)]
 enum ApiProductionStatusType {
-   Alpha_Internal,          /* For internal TI use only.  Not intended to be used by customers */
-   Alpha,                   /* Early Engineering release.  May not be functionally complete */
-   Beta_Internal,           /* For internal TI use only.  Not intended to be used by customers */
-   Beta,                    /* Functionally complete, to be used for testing and validation */
-   Production               /* Fully validated, functionally complete, ready for production use */
+    /// For internal TI use only. Not intended to be used by customers
+    Alpha_Internal,
+    /// Early Engineering release. May not be functionally complete
+    Alpha,
+    /// For internal TI use only. Not intended to be used by customers
+    Beta_Internal,
+    /// Functionally complete, to be used for testing and validation
+    Beta,
+    /// Fully validated, functionally complete, ready for production use
+    Production,
 }
 
 #[repr(C)]
@@ -110,6 +115,35 @@ pub struct DeviceInfo {
    WaferYCoordinate: uint16_t,
 }
 
+#[repr(C)]
+enum FlashBankTechType {
+    FLEP = 0,
+    FLEE = 1,
+    FLES = 2,
+    FLHV = 3
+}
+
+#[repr(C)]
+pub struct FlashBankSectorsType {
+    FlashBankTech: FlashBankTechType,
+    NumberOfSectors: uint32_t,
+    BankStartAddress: uint32_t,
+    SectorSizes: [uint16_t; 16],
+}
+
+#[repr(C)]
+pub enum FlashBankType {
+   Bank0 = 0,
+   Bank1 = 1,
+   Bank2 = 2,
+   Bank3 = 3,
+   Bank4 = 4,
+   Bank5 = 5,
+   Bank6 = 6,
+   Bank7 = 7,
+}
+
+
 
 #[link(name = "flash")]
 extern {
@@ -118,6 +152,13 @@ extern {
 
     #[link_name = "Fapi_getDeviceInfo"]
     pub fn getDeviceInfo() -> DeviceInfo;
+
+    #[link_name = "Fapi_getBankSectors"]
+    pub fn getBankSectors(Bank: FlashBankType,
+                          FlashBankSectors: *const FlashBankSectorsType);
+
+    #[link_name = "Fapi_getNumberOfBankSectors"]
+    pub fn getNumberOfBankSectors(Bank: uint32_t) -> uint32_t;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_isAddressEcc"]
@@ -134,9 +175,6 @@ extern {
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_disableAutoEccCalculation"]
     pub fn disableAutoEccCalculation() -> Status;
-
-    #[link_name = "Fapi_getNumberOfBankSectors"]
-    pub fn getNumberOfBankSectors(Bank: uint32_t) -> uint32_t;
 
     #[link_name = "Fapi_doBlankCheck"]
     pub fn doBlankCheck(StartAddress: *const uint32_t,
@@ -177,7 +215,7 @@ extern {
     pub fn doMarginReadByByte(StartAddress: *const uint8_t,
                               ReadBuffer: *const uint8_t,
                               Length: uint32_t,
-                              oReadMode: FlashReadMarginModeType) -> Status;
+                              ReadMode: FlashReadMarginModeType) -> Status;
 
     #[link_name = "Fapi_doVerifyByByte"]
     pub fn doVerifyByByte(StartAddress: *const uint8_t,
