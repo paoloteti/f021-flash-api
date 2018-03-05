@@ -6,10 +6,8 @@
 ///   v2.01.01 Build(000830)
 ///   Build Date: 2014-10-21
 ///
-extern crate libc;
-use libc::types::common::c99::*;
 
-pub type FlashStatusType = uint32_t;
+pub type FlashStatusType = u32;
 
 #[repr(C)]
 pub enum FlashProgrammingCommands {
@@ -62,20 +60,20 @@ enum ApiProductionStatusType {
 
 #[repr(C)]
 pub struct LibraryInfo{
-   ApiMajorVersion: uint8_t,
-   ApiMinorVersion: uint8_t,
-   ApiRevision: uint8_t,
+   ApiMajorVersion: u8,
+   ApiMinorVersion: u8,
+   ApiRevision: u8,
    ApiProductionStatus: ApiProductionStatusType,
-   ApiBuildNumber: uint32_t,
-   ApiTechnologyType: uint8_t,
-   ApiTechnologyRevision: uint8_t,
-   ApiEndianness: uint8_t,
-   ApiCompilerVersion: uint32_t,
+   ApiBuildNumber: u32,
+   ApiTechnologyType: u8,
+   ApiTechnologyRevision: u8,
+   ApiEndianness: u8,
+   ApiCompilerVersion: u32,
 }
 
 #[repr(C)]
 pub struct FlashStatusWordType {
-    StatusWord: [uint32_t; 4]
+    StatusWord: [u32; 4]
 }
 
 #[repr(C)]
@@ -88,31 +86,31 @@ pub enum FlashReadMarginModeType {
 #[cfg(target_endian = "little")]
 #[repr(C)]
 pub struct DeviceInfo {
-   NumberOfBanks: uint16_t,
-   Reserved: uint16_t,
-   DeviceMemorySize: uint16_t,
-   DevicePackage: uint16_t,
-   AsicId: uint32_t,
-   LotNumber: uint32_t,
-   WaferNumber: uint16_t,
-   FlowCheck: uint16_t,
-   WaferYCoordinate: uint16_t,
-   WaferXCoordinate: uint16_t,
+   NumberOfBanks: u16,
+   Reserved: u16,
+   DeviceMemorySize: u16,
+   DevicePackage: u16,
+   AsicId: u32,
+   LotNumber: u32,
+   WaferNumber: u16,
+   FlowCheck: u16,
+   WaferYCoordinate: u16,
+   WaferXCoordinate: u16,
 }
 
 #[cfg(target_endian = "big")]
 #[repr(C)]
 pub struct DeviceInfo {
-   Reserved: uint16_t,
-   NumberOfBanks: uint16_t,
-   DevicePackage: uint16_t,
-   DeviceMemorySize: uint16_t,
-   AsicId :uint32_t,
-   LotNumber: uint32_t,
-   FlowCheck: uint16_t,
-   WaferNumber: uint16_t,
-   WaferXCoordinate: uint16_t,
-   WaferYCoordinate: uint16_t,
+   Reserved: u16,
+   NumberOfBanks: u16,
+   DevicePackage: u16,
+   DeviceMemorySize: u16,
+   AsicId :u32,
+   LotNumber: u32,
+   FlowCheck: u16,
+   WaferNumber: u16,
+   WaferXCoordinate: u16,
+   WaferYCoordinate: u16,
 }
 
 #[repr(C)]
@@ -126,9 +124,9 @@ enum FlashBankTechType {
 #[repr(C)]
 pub struct FlashBankSectorsType {
     FlashBankTech: FlashBankTechType,
-    NumberOfSectors: uint32_t,
-    BankStartAddress: uint32_t,
-    SectorSizes: [uint16_t; 16],
+    NumberOfSectors: u32,
+    BankStartAddress: u32,
+    SectorSizes: [u16; 16],
 }
 
 #[repr(C)]
@@ -158,15 +156,15 @@ extern {
                           FlashBankSectors: *const FlashBankSectorsType);
 
     #[link_name = "Fapi_getNumberOfBankSectors"]
-    pub fn getNumberOfBankSectors(Bank: uint32_t) -> uint32_t;
+    pub fn getNumberOfBankSectors(Bank: u32) -> u32;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_isAddressEcc"]
-    pub fn isAddressEcc(address: uint32_t) -> bool;
+    pub fn isAddressEcc(address: u32) -> bool;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_isAddressEEPROM"]
-    pub fn isAddressEEPROM(address: uint32_t) -> bool;
+    pub fn isAddressEEPROM(address: u32) -> bool;
 
     #[cfg(flash_controller="L2FMC")]
     #[link_name = "Fapi_enableAutoEccCalculation"]
@@ -177,74 +175,74 @@ extern {
     pub fn disableAutoEccCalculation() -> Status;
 
     #[link_name = "Fapi_doBlankCheck"]
-    pub fn doBlankCheck(StartAddress: *const uint32_t,
-                        Length: uint32_t,
+    pub fn doBlankCheck(StartAddress: *const u32,
+                        Length: u32,
                         FlashStatusWord: *const FlashStatusWordType) -> Status;
 
     #[link_name = "Fapi_doMarginRead"]
-    pub fn doMarginRead(StartAddress: *const uint32_t,
-                        ReadBuffer: *const uint32_t,
-                        Length: uint32_t,
+    pub fn doMarginRead(StartAddress: *const u32,
+                        ReadBuffer: *const u32,
+                        Length: u32,
                         oReadMode: FlashReadMarginModeType) -> Status;
 
     #[link_name = "Fapi_doVerify"]
-    pub fn doVerify(StartAddress: *const uint32_t,
-                    Length: uint32_t,
-                    CheckValueBuffer: *const uint32_t,
+    pub fn doVerify(StartAddress: *const u32,
+                    Length: u32,
+                    CheckValueBuffer: *const u32,
                     FlashStatusWord: *const FlashStatusWordType) -> Status;
 
     #[link_name = "Fapi_calculatePsa"]
-    pub fn calculatePsa(StartAddress: *const uint32_t,
-                        Length: uint32_t,
-                        PsaSeed: uint32_t,
-                        oReadMode: FlashReadMarginModeType) -> uint32_t;
+    pub fn calculatePsa(StartAddress: *const u32,
+                        Length: u32,
+                        PsaSeed: u32,
+                        oReadMode: FlashReadMarginModeType) -> u32;
 
     #[link_name = "Fapi_doPsaVerify"]
-    pub fn doPsaVerify(StartAddress: *const uint32_t,
-                       Length: uint32_t,
-                       PsaValue: uint32_t,
+    pub fn doPsaVerify(StartAddress: *const u32,
+                       Length: u32,
+                       PsaValue: u32,
                        FlashStatusWord: *const FlashStatusWordType) -> Status;
 
     #[link_name = "Fapi_doBlankCheckByByte"]
-    pub fn doBlankCheckByByte(StartAddress: *const uint8_t,
-                              Length: uint32_t,
+    pub fn doBlankCheckByByte(StartAddress: *const u8,
+                              Length: u32,
                               FlashStatusWord: *const FlashStatusWordType) -> Status;
 
 
     #[link_name = "Fapi_doMarginReadByByte"]
-    pub fn doMarginReadByByte(StartAddress: *const uint8_t,
-                              ReadBuffer: *const uint8_t,
-                              Length: uint32_t,
+    pub fn doMarginReadByByte(StartAddress: *const u8,
+                              ReadBuffer: *const u8,
+                              Length: u32,
                               ReadMode: FlashReadMarginModeType) -> Status;
 
     #[link_name = "Fapi_doVerifyByByte"]
-    pub fn doVerifyByByte(StartAddress: *const uint8_t,
-                          Length: uint32_t,
-                          CheckValueBuffer: *const uint8_t,
+    pub fn doVerifyByByte(StartAddress: *const u8,
+                          Length: u32,
+                          CheckValueBuffer: *const u8,
                           FlashStatusWord: *const FlashStatusWordType) -> Status;
 
     #[link_name = "Fapi_flushPipeline"]
     pub fn flushPipeline();
 
     #[link_name = "Fapi_calculateFletcherChecksum"]
-    pub fn calculateFletcherChecksum(addr: uint32_t, len: uint32_t) -> uint32_t;
+    pub fn calculateFletcherChecksum(addr: u32, len: u32) -> u32;
 
     #[link_name = "Fapi_calculateEcc"]
-    pub fn calculateEcc(Address:uint32_t, Data:uint64_t) -> uint8_t;
+    pub fn calculateEcc(Address:u32, Data: u64) -> u8;
 
     // Programming Commands
     #[link_name = "Fapi_issueProgrammingCommand"]
-    pub fn issueProgrammingCommand(StartAddress: *const uint32_t,
-                                   DataBuffer: *const uint8_t,
-                                   DataBufferSizeInBytes: uint8_t,
-                                   EccBuffer: *const uint8_t,
-                                   EccBufferSizeInBytes: uint8_t,
+    pub fn issueProgrammingCommand(StartAddress: *const u32,
+                                   DataBuffer: *const u8,
+                                   DataBufferSizeInBytes: u8,
+                                   EccBuffer: *const u8,
+                                   EccBufferSizeInBytes: u8,
                                    mode: FlashProgrammingCommands) -> Status;
 
     #[link_name = "Fapi_issueProgrammingCommandForEccAddresses"]
-    pub fn  issueProgrammingCommandForEccAddresses(StartAddress: *const uint32_t,
-                                                   EccBuffer: *const uint8_t,
-                                                   EccBufferSizeInBytes: uint8_t) -> Status;
+    pub fn  issueProgrammingCommandForEccAddresses(StartAddress: *const u32,
+                                                   EccBuffer: *const u8,
+                                                   EccBufferSizeInBytes: u8) -> Status;
 }
 
 

@@ -4,9 +4,6 @@ version = "0.1.0"
 description = "TI Hercules ARM Safety MCUs - F021 Flash API"
 authors = ["Paolo Teti <paolo.teti@gmail.com>"]
 
-[dependencies]
-libc = "0.1"
-
 [lib]
 name = "F021"
 crate-type = ["staticlib"]
