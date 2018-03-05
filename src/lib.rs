@@ -71,6 +71,18 @@ pub struct LibraryInfo{
    ApiCompilerVersion: u32,
 }
 
+#[repr(C)]
+pub struct FlashStatusWordType {
+    StatusWord: [uint32_t; 4]
+}
+
+#[repr(C)]
+pub enum FlashReadMarginModeType {
+   NormalRead = 0x0,
+   RM0        = 0x1,
+   RM1        = 0x2,
+}
+
 #[link(name = "flash")]
 extern {
     #[link_name = "Fapi_getLibraryInfo"]
@@ -98,6 +110,53 @@ extern {
     #[link_name = "Fapi_getNumberOfBankSectors"]
     pub fn getNumberOfBankSectors(Bank: u32) -> u32;
 
+    #[link_name = "Fapi_doBlankCheck"]
+    pub fn doBlankCheck(StartAddress: *const uint32_t,
+                        Length: uint32_t,
+                        FlashStatusWord: *const FlashStatusWordType) -> Status;
+
+    #[link_name = "Fapi_doMarginRead"]
+    pub fn doMarginRead(StartAddress: *const uint32_t,
+                        ReadBuffer: *const uint32_t,
+                        Length: uint32_t,
+                        oReadMode: FlashReadMarginModeType) -> Status;
+
+    #[link_name = "Fapi_doVerify"]
+    pub fn doVerify(StartAddress: *const uint32_t,
+                    Length: uint32_t,
+                    CheckValueBuffer: *const uint32_t,
+                    FlashStatusWord: *const FlashStatusWordType) -> Status;
+
+    #[link_name = "Fapi_calculatePsa"]
+    pub fn calculatePsa(StartAddress: *const uint32_t,
+                        Length: uint32_t,
+                        PsaSeed: uint32_t,
+                        oReadMode: FlashReadMarginModeType) -> uint32_t;
+
+    #[link_name = "Fapi_doPsaVerify"]
+    pub fn doPsaVerify(StartAddress: *const uint32_t,
+                       Length: uint32_t,
+                       PsaValue: uint32_t,
+                       FlashStatusWord: *const FlashStatusWordType) -> Status;
+
+    #[link_name = "Fapi_doBlankCheckByByte"]
+    pub fn doBlankCheckByByte(StartAddress: *const uint8_t,
+                              Length: uint32_t,
+                              FlashStatusWord: *const FlashStatusWordType) -> Status;
+
+
+    #[link_name = "Fapi_doMarginReadByByte"]
+    pub fn doMarginReadByByte(StartAddress: *const uint8_t,
+                              ReadBuffer: *const uint8_t,
+                              Length: uint32_t,
+                              oReadMode: FlashReadMarginModeType) -> Status;
+
+    #[link_name = "Fapi_doVerifyByByte"]
+    pub fn doVerifyByByte(StartAddress: *const uint8_t,
+                          Length: uint32_t,
+                          CheckValueBuffer: *const uint8_t,
+                          FlashStatusWord: *const FlashStatusWordType) -> Status;
+
     #[link_name = "Fapi_flushPipeline"]
     pub fn flushPipeline();
 
@@ -108,7 +167,7 @@ extern {
     pub fn calculateEcc(Address:uint32_t, Data:uint64_t) -> uint8_t;
 
     // Programming Commands
-    #[link_name = "issueProgrammingCommand"]
+    #[link_name = "Fapi_issueProgrammingCommand"]
     pub fn issueProgrammingCommand(StartAddress: *const uint32_t,
                                    DataBuffer: *const uint8_t,
                                    DataBufferSizeInBytes: uint8_t,
@@ -116,6 +175,10 @@ extern {
                                    EccBufferSizeInBytes: uint8_t,
                                    mode: FlashProgrammingCommands) -> Status;
 
+    #[link_name = "Fapi_issueProgrammingCommandForEccAddresses"]
+    pub fn  issueProgrammingCommandForEccAddresses(StartAddress: *const uint32_t,
+                                                   EccBuffer: *const uint8_t,
+                                                   EccBufferSizeInBytes: uint8_t) -> Status;
 }
 
 
