@@ -24,24 +24,24 @@ pub enum FlashProgrammingCommands {
 
 #[repr(C)]
 pub enum Status {
-   Status_Success=0,           /* Function completed successfully */
-   Status_FsmBusy,             /* FSM is Busy */
-   Status_FsmReady,            /* FSM is Ready */
-   Error_Fail,                 /* Generic Function Fail code */
-   Error_NullPointer,          /* One of the pointer parameters is a null pointer */
-   Error_InvalidCommand,       /* Command used is invalid for the function called */
-   Error_InvalidEccAddress,    /* Returned if the ECC Address given to a function is invalid for that function */
-   Error_OtpChecksumMismatch,  /* Returned if OTP checksum does not match expected value */
-   Error_InvalidHclkValue,     /* Returned if FClk is above max FClk value - FClk is a calculated from HClk and
-                                       RWAIT/EWAIT */
-   Error_InvalidBank,          /* Returned if the specified bank does not exist */
-   Error_InvalidAddress,       /* Returned if the specified Address does not exist in Flash or OTP */
-   Error_InvalidReadMode,      /* Returned if the specified read mode does not exist */
-   Error_AsyncIncorrectDataBufferLength,   /* Returned if Data buffer size specified exceeds Data bank width */
-   Error_AsyncIncorrectEccBufferLength,    /* Returned if ECC buffer size specified exceeds ECC bank width */
-   Error_AsyncDataEccBufferLengthMismatch, /* Returned if Data buffer size either is not 64bit aligned or Data
-                                                   length exceeds amount ECC supplied */
-   Error_FeatureNotAvailable  /* FMC feature is not available on this device */
+    Status_Success=0,           /* Function completed successfully */
+    Status_FsmBusy,             /* FSM is Busy */
+    Status_FsmReady,            /* FSM is Ready */
+    Error_Fail,                 /* Generic Function Fail code */
+    Error_NullPointer,          /* One of the pointer parameters is a null pointer */
+    Error_InvalidCommand,       /* Command used is invalid for the function called */
+    Error_InvalidEccAddress,    /* Returned if the ECC Address given to a function is invalid for that function */
+    Error_OtpChecksumMismatch,  /* Returned if OTP checksum does not match expected value */
+    Error_InvalidHclkValue,     /* Returned if FClk is above max FClk value - FClk is a calculated from HClk and
+                                        RWAIT/EWAIT */
+    Error_InvalidBank,          /* Returned if the specified bank does not exist */
+    Error_InvalidAddress,       /* Returned if the specified Address does not exist in Flash or OTP */
+    Error_InvalidReadMode,      /* Returned if the specified read mode does not exist */
+    Error_AsyncIncorrectDataBufferLength,   /* Returned if Data buffer size specified exceeds Data bank width */
+    Error_AsyncIncorrectEccBufferLength,    /* Returned if ECC buffer size specified exceeds ECC bank width */
+    Error_AsyncDataEccBufferLengthMismatch, /* Returned if Data buffer size either is not 64bit aligned or Data
+                                                    length exceeds amount ECC supplied */
+    Error_FeatureNotAvailable  /* FMC feature is not available on this device */
 }
 
 #[repr(C)]
@@ -60,15 +60,15 @@ enum ApiProductionStatusType {
 
 #[repr(C)]
 pub struct LibraryInfo{
-   ApiMajorVersion: u8,
-   ApiMinorVersion: u8,
-   ApiRevision: u8,
-   ApiProductionStatus: ApiProductionStatusType,
-   ApiBuildNumber: u32,
-   ApiTechnologyType: u8,
-   ApiTechnologyRevision: u8,
-   ApiEndianness: u8,
-   ApiCompilerVersion: u32,
+    ApiMajorVersion: u8,
+    ApiMinorVersion: u8,
+    ApiRevision: u8,
+    ApiProductionStatus: ApiProductionStatusType,
+    ApiBuildNumber: u32,
+    ApiTechnologyType: u8,
+    ApiTechnologyRevision: u8,
+    ApiEndianness: u8,
+    ApiCompilerVersion: u32,
 }
 
 #[repr(C)]
@@ -86,31 +86,31 @@ pub enum FlashReadMarginModeType {
 #[cfg(target_endian = "little")]
 #[repr(C)]
 pub struct DeviceInfo {
-   NumberOfBanks: u16,
-   Reserved: u16,
-   DeviceMemorySize: u16,
-   DevicePackage: u16,
-   AsicId: u32,
-   LotNumber: u32,
-   WaferNumber: u16,
-   FlowCheck: u16,
-   WaferYCoordinate: u16,
-   WaferXCoordinate: u16,
+    NumberOfBanks: u16,
+    Reserved: u16,
+    DeviceMemorySize: u16,
+    DevicePackage: u16,
+    AsicId: u32,
+    LotNumber: u32,
+    WaferNumber: u16,
+    FlowCheck: u16,
+    WaferYCoordinate: u16,
+    WaferXCoordinate: u16,
 }
 
 #[cfg(target_endian = "big")]
 #[repr(C)]
 pub struct DeviceInfo {
-   Reserved: u16,
-   NumberOfBanks: u16,
-   DevicePackage: u16,
-   DeviceMemorySize: u16,
-   AsicId :u32,
-   LotNumber: u32,
-   FlowCheck: u16,
-   WaferNumber: u16,
-   WaferXCoordinate: u16,
-   WaferYCoordinate: u16,
+    Reserved: u16,
+    NumberOfBanks: u16,
+    DevicePackage: u16,
+    DeviceMemorySize: u16,
+    AsicId :u32,
+    LotNumber: u32,
+    FlowCheck: u16,
+    WaferNumber: u16,
+    WaferXCoordinate: u16,
+    WaferYCoordinate: u16,
 }
 
 #[repr(C)]
@@ -131,20 +131,55 @@ pub struct FlashBankSectorsType {
 
 #[repr(C)]
 pub enum FlashBankType {
-   Bank0 = 0,
-   Bank1 = 1,
-   Bank2 = 2,
-   Bank3 = 3,
-   Bank4 = 4,
-   Bank5 = 5,
-   Bank6 = 6,
-   Bank7 = 7,
+    Bank0 = 0,
+    Bank1 = 1,
+    Bank2 = 2,
+    Bank3 = 3,
+    Bank4 = 4,
+    Bank5 = 5,
+    Bank6 = 6,
+    Bank7 = 7,
 }
 
+#[repr(C)]
+pub enum FlashStateCommandsType {
+    ProgramData    = 0x0002,
+    EraseSector    = 0x0006,
+    EraseBank      = 0x0008,
+    ValidateSector = 0x000E,
+    ClearStatus    = 0x0010,
+    ProgramResume  = 0x0014,
+    EraseResume    = 0x0016,
+    ClearMore      = 0x0018
+}
 
 
 #[link(name = "flash")]
 extern {
+    #[link_name = "Fapi_enableMainBankSectors"]
+    pub fn enableMainBankSectors(SectorsEnables: u16) -> Status;
+
+    #[link_name = "Fapi_enableEepromBankSectors"]
+    pub fn enableEepromBankSectors(SectorsEnables_31_0: u32, SectorsEnables_63_32: u32) -> Status;
+
+    #[link_name = "Fapi_enableFsmDoneEvent"]
+    pub fn enableFsmDoneEvent() -> Status;
+
+    #[link_name = "Fapi_disableFsmDoneEvent"]
+    pub fn disableFsmDoneEvent() -> Status;
+
+    #[link_name = "Fapi_initializeFlashBanks"]
+    pub fn initializeFlashBanks(HclkFrequency: u32) -> Status;
+
+    #[link_name = "Fapi_setActiveFlashBank"]
+    pub fn setActiveFlashBank(NewFlashBank: FlashBankType ) -> Status;
+
+    #[link_name = "Fapi_enableBanksForOtpWrite"]
+    pub fn enableBanksForOtpWrite(Banks: u8) -> Status;
+
+    #[link_name = "Fapi_disableBanksForOtpWrite"]
+    pub fn disableBanksForOtpWrite() -> Status;
+
     #[link_name = "Fapi_getLibraryInfo"]
     pub fn getLibraryInfo() -> LibraryInfo;
 
@@ -223,6 +258,24 @@ extern {
 
     #[link_name = "Fapi_flushPipeline"]
     pub fn flushPipeline();
+
+    #[link_name = "Fapi_remapEccAddress"]
+    pub fn remapEccAddress(EccAddress: u32) -> *const u32;
+
+    #[link_name = "Fapi_remapMainAddress"]
+    pub fn remapMainAddress(MainAddress: u32) -> u32;
+
+    #[link_name = "Fapi_isAddressEcc"]
+    pub fn isAddressEcc(Address: u32) -> bool;
+
+    #[link_name = "Fapi_isAddressEEPROM"]
+    pub fn isAddressEEPROM(Address: u32) -> bool;
+
+    #[link_name = "Fapi_issueAsyncCommandWithAddress"]
+    pub fn issueAsyncCommandWithAddress(Command: FlashStateCommandsType, StartAddress: *const u32) -> Status;
+
+    #[link_name = "Fapi_issueAsyncCommand"]
+    pub fn issueAsyncCommand(command: FlashStateCommandsType ) -> Status;
 
     #[link_name = "Fapi_calculateFletcherChecksum"]
     pub fn calculateFletcherChecksum(addr: u32, len: u32) -> u32;
