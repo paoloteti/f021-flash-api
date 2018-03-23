@@ -78,9 +78,9 @@ pub struct FlashStatusWordType {
 
 #[repr(C)]
 pub enum FlashReadMarginModeType {
-   NormalRead = 0x0,
-   RM0        = 0x1,
-   RM1        = 0x2,
+    NormalRead = 0x0,
+    RM0        = 0x1,
+    RM1        = 0x2,
 }
 
 #[cfg(target_endian = "little")]
@@ -272,7 +272,8 @@ extern {
     pub fn isAddressEEPROM(Address: u32) -> bool;
 
     #[link_name = "Fapi_issueAsyncCommandWithAddress"]
-    pub fn issueAsyncCommandWithAddress(Command: FlashStateCommandsType, StartAddress: *const u32) -> Status;
+    pub fn issueAsyncCommandWithAddress(Command: FlashStateCommandsType,
+                                        StartAddress: *const u32) -> Status;
 
     #[link_name = "Fapi_issueAsyncCommand"]
     pub fn issueAsyncCommand(command: FlashStateCommandsType ) -> Status;
@@ -297,5 +298,3 @@ extern {
                                                    EccBuffer: *const u8,
                                                    EccBufferSizeInBytes: u8) -> Status;
 }
-
-
