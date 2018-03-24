@@ -24,24 +24,40 @@ pub enum FlashProgrammingCommands {
 
 #[repr(C)]
 pub enum Status {
-    Status_Success=0,           /* Function completed successfully */
-    Status_FsmBusy,             /* FSM is Busy */
-    Status_FsmReady,            /* FSM is Ready */
-    Error_Fail,                 /* Generic Function Fail code */
-    Error_NullPointer,          /* One of the pointer parameters is a null pointer */
-    Error_InvalidCommand,       /* Command used is invalid for the function called */
-    Error_InvalidEccAddress,    /* Returned if the ECC Address given to a function is invalid for that function */
-    Error_OtpChecksumMismatch,  /* Returned if OTP checksum does not match expected value */
-    Error_InvalidHclkValue,     /* Returned if FClk is above max FClk value - FClk is a calculated from HClk and
-                                        RWAIT/EWAIT */
-    Error_InvalidBank,          /* Returned if the specified bank does not exist */
-    Error_InvalidAddress,       /* Returned if the specified Address does not exist in Flash or OTP */
-    Error_InvalidReadMode,      /* Returned if the specified read mode does not exist */
-    Error_AsyncIncorrectDataBufferLength,   /* Returned if Data buffer size specified exceeds Data bank width */
-    Error_AsyncIncorrectEccBufferLength,    /* Returned if ECC buffer size specified exceeds ECC bank width */
-    Error_AsyncDataEccBufferLengthMismatch, /* Returned if Data buffer size either is not 64bit aligned or Data
-                                                    length exceeds amount ECC supplied */
-    Error_FeatureNotAvailable  /* FMC feature is not available on this device */
+    /// Function completed successfully
+    Status_Success = 0,
+    /// FSM is Busy
+    Status_FsmBusy,
+    /// FSM is Ready
+    Status_FsmReady,
+    /// Generic Function Fail code
+    Error_Fail,
+    /// One of the pointer parameters is a null pointer
+    Error_NullPointer,
+    /// Command used is invalid for the function called
+    Error_InvalidCommand,
+    /// ECC Address given to a function is invalid for that function
+    Error_InvalidEccAddress,
+    /// OTP checksum does not match expected value
+    Error_OtpChecksumMismatch,
+    /// FClk is above max FClk value - FClk is a calculated
+    /// from HClk and RWAIT/EWAIT
+    Error_InvalidHclkValue,
+    /// Specified bank does not exist
+    Error_InvalidBank,
+    /// Specified Address does not exist in Flash or OTP
+    Error_InvalidAddress,
+    /// Specified Address does not exist in Flash or OTP
+    Error_InvalidReadMode,
+    /// Data buffer size specified exceeds Data bank width
+    Error_AsyncIncorrectDataBufferLength,
+    /// ECC buffer size specified exceeds ECC bank width
+    Error_AsyncIncorrectEccBufferLength,
+    /// Data buffer size either is not 64bit aligned or Data
+    /// length exceeds amount ECC supplied
+    Error_AsyncDataEccBufferLengthMismatch,
+    /// FMC feature is not available on this device
+    Error_FeatureNotAvailable,
 }
 
 #[repr(C)]
