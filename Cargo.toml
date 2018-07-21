@@ -6,4 +6,3 @@ authors = ["Paolo Teti <paolo.teti@gmail.com>"]
 
 [lib]
 name = "F021"
-crate-type = ["staticlib"]
