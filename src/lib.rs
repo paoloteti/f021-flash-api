@@ -1,3 +1,4 @@
+#![no_std]
 #![allow(bad_style)]
 #![allow(dead_code)]
 ///
