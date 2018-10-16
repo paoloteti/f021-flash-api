@@ -76,7 +76,7 @@ enum ApiProductionStatusType {
 }
 
 #[repr(C)]
-pub struct LibraryInfo{
+pub struct LibraryInfo {
     ApiMajorVersion: u8,
     ApiMinorVersion: u8,
     ApiRevision: u8,
@@ -90,14 +90,14 @@ pub struct LibraryInfo{
 
 #[repr(C)]
 pub struct FlashStatusWordType {
-    StatusWord: [u32; 4]
+    StatusWord: [u32; 4],
 }
 
 #[repr(C)]
 pub enum FlashReadMarginModeType {
     NormalRead = 0x0,
-    RM0        = 0x1,
-    RM1        = 0x2,
+    RM0 = 0x1,
+    RM1 = 0x2,
 }
 
 #[cfg(target_endian = "little")]
@@ -122,7 +122,7 @@ pub struct DeviceInfo {
     NumberOfBanks: u16,
     DevicePackage: u16,
     DeviceMemorySize: u16,
-    AsicId :u32,
+    AsicId: u32,
     LotNumber: u32,
     FlowCheck: u16,
     WaferNumber: u16,
@@ -135,7 +135,7 @@ enum FlashBankTechType {
     FLEP = 0,
     FLEE = 1,
     FLES = 2,
-    FLHV = 3
+    FLHV = 3,
 }
 
 #[repr(C)]
@@ -160,19 +160,18 @@ pub enum FlashBankType {
 
 #[repr(C)]
 pub enum FlashStateCommandsType {
-    ProgramData    = 0x0002,
-    EraseSector    = 0x0006,
-    EraseBank      = 0x0008,
+    ProgramData = 0x0002,
+    EraseSector = 0x0006,
+    EraseBank = 0x0008,
     ValidateSector = 0x000E,
-    ClearStatus    = 0x0010,
-    ProgramResume  = 0x0014,
-    EraseResume    = 0x0016,
-    ClearMore      = 0x0018
+    ClearStatus = 0x0010,
+    ProgramResume = 0x0014,
+    EraseResume = 0x0016,
+    ClearMore = 0x0018,
 }
 
-
 #[link(name = "flash")]
-extern {
+extern "C" {
     #[link_name = "Fapi_enableMainBankSectors"]
     pub fn enableMainBankSectors(SectorsEnables: u16) -> Status;
 
@@ -189,7 +188,7 @@ extern {
     pub fn initializeFlashBanks(HclkFrequency: u32) -> Status;
 
     #[link_name = "Fapi_setActiveFlashBank"]
-    pub fn setActiveFlashBank(NewFlashBank: FlashBankType ) -> Status;
+    pub fn setActiveFlashBank(NewFlashBank: FlashBankType) -> Status;
 
     #[link_name = "Fapi_enableBanksForOtpWrite"]
     pub fn enableBanksForOtpWrite(Banks: u8) -> Status;
@@ -204,74 +203,88 @@ extern {
     pub fn getDeviceInfo() -> DeviceInfo;
 
     #[link_name = "Fapi_getBankSectors"]
-    pub fn getBankSectors(Bank: FlashBankType,
-                          FlashBankSectors: *const FlashBankSectorsType);
+    pub fn getBankSectors(Bank: FlashBankType, FlashBankSectors: *const FlashBankSectorsType);
 
     #[link_name = "Fapi_getNumberOfBankSectors"]
     pub fn getNumberOfBankSectors(Bank: u32) -> u32;
 
-    #[cfg(flash_controller="L2FMC")]
+    #[cfg(flash_controller = "L2FMC")]
     #[link_name = "Fapi_isAddressEcc"]
     pub fn isAddressEcc(address: u32) -> bool;
 
-    #[cfg(flash_controller="L2FMC")]
+    #[cfg(flash_controller = "L2FMC")]
     #[link_name = "Fapi_isAddressEEPROM"]
     pub fn isAddressEEPROM(address: u32) -> bool;
 
-    #[cfg(flash_controller="L2FMC")]
+    #[cfg(flash_controller = "L2FMC")]
     #[link_name = "Fapi_enableAutoEccCalculation"]
     pub fn enableAutoEccCalculation() -> Status;
 
-    #[cfg(flash_controller="L2FMC")]
+    #[cfg(flash_controller = "L2FMC")]
     #[link_name = "Fapi_disableAutoEccCalculation"]
     pub fn disableAutoEccCalculation() -> Status;
 
     #[link_name = "Fapi_doBlankCheck"]
-    pub fn doBlankCheck(StartAddress: *const u32,
-                        Length: u32,
-                        FlashStatusWord: *const FlashStatusWordType) -> Status;
+    pub fn doBlankCheck(
+        StartAddress: *const u32,
+        Length: u32,
+        FlashStatusWord: *const FlashStatusWordType,
+    ) -> Status;
 
     #[link_name = "Fapi_doMarginRead"]
-    pub fn doMarginRead(StartAddress: *const u32,
-                        ReadBuffer: *const u32,
-                        Length: u32,
-                        oReadMode: FlashReadMarginModeType) -> Status;
+    pub fn doMarginRead(
+        StartAddress: *const u32,
+        ReadBuffer: *const u32,
+        Length: u32,
+        oReadMode: FlashReadMarginModeType,
+    ) -> Status;
 
     #[link_name = "Fapi_doVerify"]
-    pub fn doVerify(StartAddress: *const u32,
-                    Length: u32,
-                    CheckValueBuffer: *const u32,
-                    FlashStatusWord: *const FlashStatusWordType) -> Status;
+    pub fn doVerify(
+        StartAddress: *const u32,
+        Length: u32,
+        CheckValueBuffer: *const u32,
+        FlashStatusWord: *const FlashStatusWordType,
+    ) -> Status;
 
     #[link_name = "Fapi_calculatePsa"]
-    pub fn calculatePsa(StartAddress: *const u32,
-                        Length: u32,
-                        PsaSeed: u32,
-                        oReadMode: FlashReadMarginModeType) -> u32;
+    pub fn calculatePsa(
+        StartAddress: *const u32,
+        Length: u32,
+        PsaSeed: u32,
+        oReadMode: FlashReadMarginModeType,
+    ) -> u32;
 
     #[link_name = "Fapi_doPsaVerify"]
-    pub fn doPsaVerify(StartAddress: *const u32,
-                       Length: u32,
-                       PsaValue: u32,
-                       FlashStatusWord: *const FlashStatusWordType) -> Status;
+    pub fn doPsaVerify(
+        StartAddress: *const u32,
+        Length: u32,
+        PsaValue: u32,
+        FlashStatusWord: *const FlashStatusWordType,
+    ) -> Status;
 
     #[link_name = "Fapi_doBlankCheckByByte"]
-    pub fn doBlankCheckByByte(StartAddress: *const u8,
-                              Length: u32,
-                              FlashStatusWord: *const FlashStatusWordType) -> Status;
-
+    pub fn doBlankCheckByByte(
+        StartAddress: *const u8,
+        Length: u32,
+        FlashStatusWord: *const FlashStatusWordType,
+    ) -> Status;
 
     #[link_name = "Fapi_doMarginReadByByte"]
-    pub fn doMarginReadByByte(StartAddress: *const u8,
-                              ReadBuffer: *const u8,
-                              Length: u32,
-                              ReadMode: FlashReadMarginModeType) -> Status;
+    pub fn doMarginReadByByte(
+        StartAddress: *const u8,
+        ReadBuffer: *const u8,
+        Length: u32,
+        ReadMode: FlashReadMarginModeType,
+    ) -> Status;
 
     #[link_name = "Fapi_doVerifyByByte"]
-    pub fn doVerifyByByte(StartAddress: *const u8,
-                          Length: u32,
-                          CheckValueBuffer: *const u8,
-                          FlashStatusWord: *const FlashStatusWordType) -> Status;
+    pub fn doVerifyByByte(
+        StartAddress: *const u8,
+        Length: u32,
+        CheckValueBuffer: *const u8,
+        FlashStatusWord: *const FlashStatusWordType,
+    ) -> Status;
 
     #[link_name = "Fapi_flushPipeline"]
     pub fn flushPipeline();
@@ -289,29 +302,35 @@ extern {
     pub fn isAddressEEPROM(Address: u32) -> bool;
 
     #[link_name = "Fapi_issueAsyncCommandWithAddress"]
-    pub fn issueAsyncCommandWithAddress(Command: FlashStateCommandsType,
-                                        StartAddress: *const u32) -> Status;
+    pub fn issueAsyncCommandWithAddress(
+        Command: FlashStateCommandsType,
+        StartAddress: *const u32,
+    ) -> Status;
 
     #[link_name = "Fapi_issueAsyncCommand"]
-    pub fn issueAsyncCommand(command: FlashStateCommandsType ) -> Status;
+    pub fn issueAsyncCommand(command: FlashStateCommandsType) -> Status;
 
     #[link_name = "Fapi_calculateFletcherChecksum"]
     pub fn calculateFletcherChecksum(addr: u32, len: u32) -> u32;
 
     #[link_name = "Fapi_calculateEcc"]
-    pub fn calculateEcc(Address:u32, Data: u64) -> u8;
+    pub fn calculateEcc(Address: u32, Data: u64) -> u8;
 
     // Programming Commands
     #[link_name = "Fapi_issueProgrammingCommand"]
-    pub fn issueProgrammingCommand(StartAddress: *const u32,
-                                   DataBuffer: *const u8,
-                                   DataBufferSizeInBytes: u8,
-                                   EccBuffer: *const u8,
-                                   EccBufferSizeInBytes: u8,
-                                   mode: FlashProgrammingCommands) -> Status;
+    pub fn issueProgrammingCommand(
+        StartAddress: *const u32,
+        DataBuffer: *const u8,
+        DataBufferSizeInBytes: u8,
+        EccBuffer: *const u8,
+        EccBufferSizeInBytes: u8,
+        mode: FlashProgrammingCommands,
+    ) -> Status;
 
     #[link_name = "Fapi_issueProgrammingCommandForEccAddresses"]
-    pub fn  issueProgrammingCommandForEccAddresses(StartAddress: *const u32,
-                                                   EccBuffer: *const u8,
-                                                   EccBufferSizeInBytes: u8) -> Status;
+    pub fn issueProgrammingCommandForEccAddresses(
+        StartAddress: *const u32,
+        EccBuffer: *const u8,
+        EccBufferSizeInBytes: u8,
+    ) -> Status;
 }
